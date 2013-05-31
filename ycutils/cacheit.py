@@ -20,18 +20,18 @@ from functools import wraps
 import time
 
 def cacheit(expiry=None):
-    def wrapper(func):
+    def decorator(func):
         cache = {}
 
         if not expiry:
             @wraps(func)
-            def wrapped(*args):
+            def wrapper(*args):
                 if args not in cache:
                     return cache.setdefault(args, func(*args))
                 return cache[args]
         else:
             @wraps(func)
-            def wrapped(*args):
+            def wrapper(*args):
                 now = time.time()
                 item = cache.get(args)
                 if item:
@@ -41,8 +41,8 @@ def cacheit(expiry=None):
                 cache[args] = (value, now+expiry)
                 return value
 
-        return wrapped
-    return wrapper
+        return wrapper
+    return decorator
 
 if __name__ == '__main__':
     @cacheit()

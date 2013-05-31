@@ -23,7 +23,7 @@ import time
 def batchit(batch_func, count, expiry=None):
     expiry = expiry or 3600
 
-    def wrapper(func):
+    def decorator(func):
         func.queue = []
         func.timestamp = time.time() + expiry
 
@@ -35,16 +35,16 @@ def batchit(batch_func, count, expiry=None):
         func.batch = batch
 
         @wraps(func)
-        def wrapped(*args, **kwargs):
+        def wrapper(*args, **kwargs):
             func.queue.append((args, kwargs))
             if len(func.queue) == count:
                 func.batch()
             elif func.timestamp < time.time():
                 func.batch()
 
-        return wrapped
+        return wrapper
 
-    return wrapper
+    return decorator
 
 if __name__ == '__main__':
     def batch_f(batch_args):
