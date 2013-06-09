@@ -49,3 +49,12 @@
 	import echo
 	
 	echo.setup(log.msg, '')
+
+## basex ##
+
+任意进制（<=256）转换：
+
+    codec = BaseX("13579")
+    codec.encode(100)
+	codec.decode("1")			# 0
+	codec.decode("13")			# 1
